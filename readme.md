@@ -2,8 +2,8 @@
 Driver for the Ouster OS1 LiDARs
 
 ## Features
-[x] Parsing binary stream into structs
+- [x] Parsing binary stream into structs
 
-[ ] XYZ conversion
+- [ ] XYZ conversion
 
-[ ] IMU unwarp
+- [ ] IMU unwarp
