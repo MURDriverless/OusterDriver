@@ -48,4 +48,27 @@ struct LidarCol {
 
         LidarCol(const uint8_t* data);
 };
+
+struct ImuPacket {
+    public:
+        uint64_t diagnostic_time;
+        uint64_t accelerometer_time;
+        uint64_t gyroscope_time;
+
+        // acceleration in x axis (g)
+        _Float32 x_accel;
+        // acceleration in y axis (g)
+        float y_accel;
+        // acceleration in z axis (g)
+        float z_accel;
+
+        // angular velocity in x axis (deg/s)
+        float x_rot;
+        // angular velocity in y axis (deg/s)
+        float y_rot;
+        // angular velocity in z axis (deg/s)
+        float z_rot;
+
+        ImuPacket(const uint8_t* data);
+};
 } // End namespace OS1

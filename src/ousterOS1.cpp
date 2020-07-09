@@ -2,6 +2,7 @@
 #include <iostream>
 #include <array>
 #include <algorithm>
+#include <cstring>
 
 /*
 Parse binary stream as per
@@ -50,6 +51,32 @@ LidarCol::LidarCol(const uint8_t* data) {
     block_status |= ((uint32_t) data[785]) << 8;
     block_status |= ((uint32_t) data[786]) << 16;
     block_status |= ((uint32_t) data[787]) << 24;
+}
+
+ImuPacket::ImuPacket(const uint8_t* data) {
+    #pragma message ("Warning: assuming Little endian")
+    diagnostic_time = ((uint64_t) data[0]);
+    for (int i = 1; i < 8; i++) {
+        diagnostic_time |= ((uint64_t) data[i]) << (8*i);
+    }
+
+    accelerometer_time = ((uint64_t) data[8]);
+    for (int i = 1; i < 8; i++) {
+        accelerometer_time |= ((uint64_t) data[8+i]) << (8*i);
+    }
+
+    gyroscope_time = ((uint64_t) data[16]);
+    for (int i = 1; i < 8; i++) {
+        gyroscope_time |= ((uint64_t) data[16+i]) << (8*i);
+    }
+
+    std::memcpy(&x_accel, data+24, sizeof(x_accel));
+    std::memcpy(&y_accel, data+28, sizeof(y_accel));
+    std::memcpy(&z_accel, data+32, sizeof(z_accel));
+
+    std::memcpy(&x_rot, data+36, sizeof(x_rot));
+    std::memcpy(&x_rot, data+40, sizeof(x_rot));
+    std::memcpy(&x_rot, data+44, sizeof(x_rot));
 }
 
 } // End namespace OS1
