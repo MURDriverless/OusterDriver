@@ -8,7 +8,7 @@
 int test();
 int test2(OS1::LidarDataBlock& datablock);
 int imuTest();
-void float_test();
+int float_test();
 
 int main(int argc, char** argv) {
     test();
@@ -86,15 +86,15 @@ int test2(OS1::LidarDataBlock& datablock) {
 }
 
 int imuTest() {
+    static_assert(sizeof(float) == 4, "float type is not 32bit");
     uint8_t raw[48];
 
     uint64_t test_64 = 0xDEADBEEFC0FEBADD;
     uint64_t test_64_2 = 0xBADDC0FEBEEFDEAD;
 
-    // uint8_t test_f[] = {0x4b, 0x3c, 0x61, 0x4e}; // 12345678 in IEEE-754
-    uint8_t test_f[] = {0x4e, 0x61, 0x3c, 0x4b}; // 12345678 in IEEE-754
-    uint8_t test_f_2[] = {0x4c, 0xa7, 0x2f, 0xf6}; // 87654320 in IEEE-754
-    uint8_t test_f_3[] = {0xcb, 0x3c, 0x61, 0x4e}; // -12345678 in IEE-754
+    uint32_t test_f[] = {0x4b3c614e}; // 12345678 in IEEE-754
+    uint32_t test_f_2[] = {0x4ca72ff6}; // 87654320 in IEEE-754
+    uint32_t test_f_3[] = {0xcb3c614e}; // -12345678 in IEE-754
 
     std::memcpy(raw, &test_64, sizeof(test_64));
     std::memcpy(raw+8, &test_64_2, sizeof(test_64_2));
@@ -119,16 +119,25 @@ int imuTest() {
 
     std::cout << imuPacket.x_accel << std::endl;
     assert(imuPacket.x_accel ==  12345678);
+    std::cout << imuPacket.y_accel << std::endl;
     assert(imuPacket.y_accel ==  87654320);
+    std::cout << imuPacket.z_accel << std::endl;
     assert(imuPacket.z_accel == -12345678);
 
+    std::cout << imuPacket.x_rot << std::endl;
     assert(imuPacket.x_rot ==  12345678);
+    std::cout << imuPacket.y_rot << std::endl;
     assert(imuPacket.y_rot ==  87654320);
+    std::cout << imuPacket.z_rot << std::endl;
     assert(imuPacket.z_rot == -12345678);
+
+    std::cout << std::endl << "IMU Packet Passed" << std::endl << std::endl;
 }
 
-void float_test() {
+int float_test() {
     float temp = 12345678;
+
+    uint8_t ans[] = {0x4e, 0x61, 0x3c, 0x4b};
     uint8_t raw[sizeof(temp)];
 
     std::memcpy(raw, &temp, sizeof(temp));
@@ -138,4 +147,11 @@ void float_test() {
         std::cout << std::hex << (unsigned) raw[i];
     }
     std::cout << std::endl  << std::endl;
+
+    bool littleEndian = 1;
+    for (int i = 0; i < sizeof(temp); i++) {
+        littleEndian &= (raw[i] == ans[i]);
+    }
+
+    std::cout << ((littleEndian) ? "Little Endian Float" : "Big Endian Float") << std::endl << std::endl;
 }
