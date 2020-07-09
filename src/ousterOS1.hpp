@@ -56,7 +56,7 @@ struct ImuPacket {
         uint64_t gyroscope_time;
 
         // acceleration in x axis (g)
-        _Float32 x_accel;
+        float x_accel;
         // acceleration in y axis (g)
         float y_accel;
         // acceleration in z axis (g)

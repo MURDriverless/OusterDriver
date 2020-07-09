@@ -54,7 +54,7 @@ LidarCol::LidarCol(const uint8_t* data) {
 }
 
 ImuPacket::ImuPacket(const uint8_t* data) {
-    #pragma message ("Warning: assuming Little endian")
+    #pragma message ("Warning: assuming Little endian float")
     diagnostic_time = ((uint64_t) data[0]);
     for (int i = 1; i < 8; i++) {
         diagnostic_time |= ((uint64_t) data[i]) << (8*i);
