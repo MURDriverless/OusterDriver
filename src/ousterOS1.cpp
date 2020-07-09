@@ -75,8 +75,8 @@ ImuPacket::ImuPacket(const uint8_t* data) {
     std::memcpy(&z_accel, data+32, sizeof(z_accel));
 
     std::memcpy(&x_rot, data+36, sizeof(x_rot));
-    std::memcpy(&x_rot, data+40, sizeof(x_rot));
-    std::memcpy(&x_rot, data+44, sizeof(x_rot));
+    std::memcpy(&y_rot, data+40, sizeof(x_rot));
+    std::memcpy(&z_rot, data+44, sizeof(x_rot));
 }
 
 } // End namespace OS1
