@@ -7,10 +7,13 @@
 
 int test();
 int test2(OS1::LidarDataBlock& datablock);
+int imuTest();
+void float_test();
 
 int main(int argc, char** argv) {
     test();
-
+    float_test();
+    imuTest();
 
     return 0;
 }
@@ -80,4 +83,59 @@ int test2(OS1::LidarDataBlock& datablock) {
     std::cout << std::endl << "LidarBlock passed" << std::endl << std::endl;
 
     return 1;
+}
+
+int imuTest() {
+    uint8_t raw[48];
+
+    uint64_t test_64 = 0xDEADBEEFC0FEBADD;
+    uint64_t test_64_2 = 0xBADDC0FEBEEFDEAD;
+
+    // uint8_t test_f[] = {0x4b, 0x3c, 0x61, 0x4e}; // 12345678 in IEEE-754
+    uint8_t test_f[] = {0x4e, 0x61, 0x3c, 0x4b}; // 12345678 in IEEE-754
+    uint8_t test_f_2[] = {0x4c, 0xa7, 0x2f, 0xf6}; // 87654320 in IEEE-754
+    uint8_t test_f_3[] = {0xcb, 0x3c, 0x61, 0x4e}; // -12345678 in IEE-754
+
+    std::memcpy(raw, &test_64, sizeof(test_64));
+    std::memcpy(raw+8, &test_64_2, sizeof(test_64_2));
+    std::memcpy(raw+16, &test_64, sizeof(test_64));
+
+    std::memcpy(raw+24, test_f, 4);
+    std::memcpy(raw+28, test_f_2, 4);
+    std::memcpy(raw+32, test_f_3, 4);
+
+    std::memcpy(raw+36, test_f, 4);
+    std::memcpy(raw+40, test_f_2, 4);
+    std::memcpy(raw+44, test_f_3, 4);
+
+    OS1::ImuPacket imuPacket = OS1::ImuPacket(raw);
+
+    std::cout << imuPacket.diagnostic_time << std::endl;
+    assert(imuPacket.diagnostic_time == test_64);
+    std::cout << imuPacket.accelerometer_time << std::endl;
+    assert(imuPacket.accelerometer_time == test_64_2);
+    std::cout << imuPacket.gyroscope_time << std::endl;
+    assert(imuPacket.gyroscope_time == test_64);
+
+    std::cout << imuPacket.x_accel << std::endl;
+    assert(imuPacket.x_accel ==  12345678);
+    assert(imuPacket.y_accel ==  87654320);
+    assert(imuPacket.z_accel == -12345678);
+
+    assert(imuPacket.x_rot ==  12345678);
+    assert(imuPacket.y_rot ==  87654320);
+    assert(imuPacket.z_rot == -12345678);
+}
+
+void float_test() {
+    float temp = 12345678;
+    uint8_t raw[sizeof(temp)];
+
+    std::memcpy(raw, &temp, sizeof(temp));
+
+    std::cout << "0x";
+    for (int i = 0; i < sizeof(temp); i++) {
+        std::cout << std::hex << (unsigned) raw[i];
+    }
+    std::cout << std::endl  << std::endl;
 }
