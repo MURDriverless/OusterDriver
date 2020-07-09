@@ -1,4 +1,6 @@
 #include "ousterOS1.hpp"
+#include "ousterOS1_util.hpp"
+
 #include <iostream>
 #include <array>
 #include <algorithm>
