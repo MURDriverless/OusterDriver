@@ -11,10 +11,14 @@ Also Endianess would then be required to be checked per platform.
  */
 
 namespace OS1 {
-const ssize_t LIDAR_COL_SIZE = 788;
-const ssize_t LIDAR_DBLOCK_SIZE = 12;
-const ssize_t IMU_PACKET_SIZE = 48;
+const size_t IMU_PACKET_SIZE = 48;
+
 const int LIDAR_V_RES = 64;
+const int LIDAR_COL_PER_PACKET = 16;
+const size_t LIDAR_COL_SIZE = 788;
+const size_t LIDAR_PACKET_SIZE = LIDAR_COL_SIZE * LIDAR_COL_PER_PACKET;
+const size_t LIDAR_DBLOCK_SIZE = 12;
+
 const uint32_t INVALID_DATA_BLOCK = 0x0;
 const uint32_t VALID_DATA_BLOCK = 0xFFFFFFFF;
 
