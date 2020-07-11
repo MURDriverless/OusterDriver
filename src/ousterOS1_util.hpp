@@ -16,5 +16,8 @@ class LidarLUT {
                        int H,
                        const std::vector<double>& azimuth_angles,
                        const std::vector<double>& altitude_angles);
+
+    private:
+        LidarLUT() {}
 };
 } // End namespace OS1
