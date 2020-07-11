@@ -14,17 +14,17 @@ namespace OS1 {
             for (int vertIdx = 0; vertIdx < H; vertIdx++) {
                 int idx = 3 * (colIdx * H + vertIdx);
 
-                double theta = (azimuth_angles[idx] * 2 * M_PI / 360.0) + theta_0;
+                double theta = (azimuth_angles[vertIdx] * 2 * M_PI / 360.0) + theta_0;
 
                 // x LUT
-                table[idx + 0] =  std::cos(altitude_angles[idx] * 2 * M_PI / 360.0) *
+                table[idx + 0] =  std::cos(altitude_angles[vertIdx] * 2 * M_PI / 360.0) *
                                   std::cos(theta);
                 // y LUT
-                table[idx + 1] = -std::cos(altitude_angles[idx] * 2 * M_PI / 360.0) *
+                table[idx + 1] = -std::cos(altitude_angles[vertIdx] * 2 * M_PI / 360.0) *
                                   std::sin(theta);
 
                 // z LUT
-                table[idx + 2] =  std::sin(altitude_angles[idx] * 2 * M_PI / 360.0);
+                table[idx + 2] =  std::sin(altitude_angles[vertIdx] * 2 * M_PI / 360.0);
             }
         }
     }
