@@ -7,6 +7,9 @@ SRCS := $(wildcard ./src/*.cpp)
 OBJS := $(addsuffix .o, $(basename $(SRCS)))
 DEPS := $(OBJS:.o=.d)
 
+.PHONY : all
+all: $(TARGET)
+
 .PHONY : debug
 debug: CPPFLAGS += -DDEBUG -g
 debug: $(TARGET)
